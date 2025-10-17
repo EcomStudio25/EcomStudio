@@ -1,0 +1,210 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial', sans-serif;
+  background: #1b1c1e;
+  color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: #000000;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.logo img {
+  height: 32px;
+  width: auto;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.login-box {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+  border: 2px solid #292a2e;
+  border-radius: 20px;
+  padding: 30px 60px 40px 60px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.login-title {
+  font-size: 36px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-input {
+  width: 100%;
+  background: #1a1a1a;
+  border: 1px solid #333333;
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 15px;
+  color: #ffffff;
+  transition: all 0.3s;
+  outline: none;
+}
+
+.form-input::placeholder {
+  color: #666666;
+}
+
+.form-input:focus {
+  border-color: #0066ec;
+  background: #222222;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #cccccc;
+  cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #0066ec;
+}
+
+.forgot-password {
+  color: #999999;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s;
+  cursor: pointer;
+}
+
+.forgot-password:hover {
+  color: #ffffff;
+}
+
+.login-button {
+  width: 100%;
+  background: linear-gradient(180deg, #0066ec 0%, #0052be 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 18px;
+  font-size: 27px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 102, 236, 0.3);
+}
+
+.login-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 102, 236, 0.4);
+}
+
+.login-button:active {
+  transform: translateY(0);
+}
+
+.signup-prompt {
+  margin-top: 25px;
+  font-size: 15px;
+  color: #999999;
+  text-align: center;
+}
+
+.signup-link {
+  color: #72ff00;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.3s;
+  cursor: pointer;
+}
+
+.signup-link:hover {
+  opacity: 0.8;
+}
+
+.message {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  display: none;
+}
+
+.message.error {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  color: #ff6b6b;
+}
+
+.message.success {
+  background: rgba(114, 255, 0, 0.1);
+  border: 1px solid rgba(114, 255, 0, 0.3);
+  color: #72ff00;
+}
+
+.message.show {
+  display: block;
+}
+
+.login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .login-box {
+    padding: 25px 30px 35px 30px;
+    max-width: 100%;
+  }
+
+  .login-title {
+    font-size: 28px;
+  }
+
+  .header {
+    height: 70px;
+  }
+
+  .logo img {
+    height: 28px;
+  }
+
+  .signup-prompt {
+    font-size: 13px;
+    margin-top: 20px;
+  }
+}
