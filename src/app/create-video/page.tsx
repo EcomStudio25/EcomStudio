@@ -13,16 +13,24 @@ import FromURL from './components/FromURL';
 import BatchProcessing from './components/BatchProcessing';
 import { useCredits } from './hooks/useCredits';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default function CreateVideoPage() {
   const router = useRouter();
   const { showToast } = useToast();
 
-  const [supabase] = useState(() =>
-    createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
-  );
+  const [supabase] = useState(() => {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+
+    // Skip initialization during build time
+    if (!supabaseUrl || !supabaseKey) {
+      return null as any;
+    }
+
+    return createClient(supabaseUrl, supabaseKey);
+  });
 
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [currentMethod, setCurrentMethod] = useState<string>('');

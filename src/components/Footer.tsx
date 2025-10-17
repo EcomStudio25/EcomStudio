@@ -143,13 +143,13 @@ export default function Footer() {
           </div>
           <div className="social-icons">
             <a href="https://instagram.com/ecomstudio" className="social-icon" title="Instagram" target="_blank" rel="noopener noreferrer">
-              <img src="/instagram_icon.png" alt="Instagram" />
+              <img src="/icon_SM_INS.svg" alt="Instagram" />
             </a>
             <a href="https://youtube.com/@ecomstudio" className="social-icon" title="YouTube" target="_blank" rel="noopener noreferrer">
-              <img src="/youtube_icon.png" alt="YouTube" />
+              <img src="/icon_SM_YT.svg" alt="YouTube" />
             </a>
             <a href="https://linkedin.com/company/ecomstudio" className="social-icon" title="LinkedIn" target="_blank" rel="noopener noreferrer">
-              <img src="/linkedin_icon.png" alt="LinkedIn" />
+              <img src="/icon_SM_IN.svg" alt="LinkedIn" />
             </a>
           </div>
           <div className="footer-email">

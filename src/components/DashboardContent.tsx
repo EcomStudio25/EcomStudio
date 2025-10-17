@@ -192,8 +192,27 @@ export default function DashboardContent({ supabase, currentUser }: DashboardCon
     return `https://ess25.b-cdn.net/user-${currentUser.id}/${folder}/${fileName}`;
   };
 
-  const openLightbox = (url: string, type: 'image' | 'video'): void => {
+  const openLightbox = async (url: string, type: 'image' | 'video', fileId?: string): Promise<void> => {
     setLightboxData({ url, type });
+
+    // Mark video as viewed if fileId is provided
+    if (fileId && type === 'video') {
+      try {
+        await supabase
+          .from('user_files')
+          .update({ is_viewed: true })
+          .eq('id', fileId);
+
+        // Update local state
+        setLatestVideos(prev =>
+          prev.map(video =>
+            video.id === fileId ? { ...video, is_viewed: true } : video
+          )
+        );
+      } catch (error) {
+        console.error('Error marking video as viewed:', error);
+      }
+    }
   };
 
   const closeLightbox = (): void => {
@@ -215,7 +234,7 @@ export default function DashboardContent({ supabase, currentUser }: DashboardCon
         .stats-container {
           height: 180px;
           width: 100%;
-          background: url('/stats_bg.jpg') repeat;
+          background: linear-gradient(to bottom, #313237, #1e1f22);
           border-radius: 20px;
           border: 2px solid #292a2e;
           box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
@@ -547,6 +566,9 @@ export default function DashboardContent({ supabase, currentUser }: DashboardCon
         .lightbox-close svg {
           width: 20px;
           height: 20px;
+        }
+
+        .lightbox-close svg path {
           stroke: #000;
         }
 
@@ -681,7 +703,7 @@ export default function DashboardContent({ supabase, currentUser }: DashboardCon
           </div>
           <div className="stats-center">
             <div className="banner-wave">
-              <img src="/AI_wave.jpg" alt="Simple Moves, Big Results" />
+              <img src="/DB_Banner.jpg" alt="Simple Moves, Big Results" />
             </div>
           </div>
           <div className="stats-right">
@@ -723,7 +745,7 @@ export default function DashboardContent({ supabase, currentUser }: DashboardCon
                     <div
                       key={video.id}
                       className={`gallery-item ${video.is_viewed === false ? 'new-item' : ''}`}
-                      onClick={() => openLightbox(videoUrl, 'video')}
+                      onClick={() => openLightbox(videoUrl, 'video', video.id)}
                     >
                       <div className="gallery-item-content">
                         <video src={videoUrl} preload="metadata"></video>
@@ -777,13 +799,13 @@ export default function DashboardContent({ supabase, currentUser }: DashboardCon
       </div>
 
       {/* Lightbox */}
-      <div className={`lightbox ${lightboxData ? 'active' : ''}`}>
+      <div className={`lightbox ${lightboxData ? 'active' : ''}`} onClick={closeLightbox}>
         <button className="lightbox-close" onClick={closeLightbox}>
           <svg viewBox="0 0 24 24" fill="none">
-            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
           </svg>
         </button>
-        <div className="lightbox-content">
+        <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
           {lightboxData && lightboxData.type === 'video' ? (
             <video src={lightboxData.url} controls autoPlay />
           ) : lightboxData ? (
