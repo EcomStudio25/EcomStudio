@@ -27,6 +27,8 @@ interface FromLibraryProps {
   onGenerateStart: () => void;
   onGenerateEnd: () => void;
   onDeductCredits: (count: number) => Promise<boolean>;
+  creditPerImage: number;
+  pricing: { credit_per_image: number; discount_rate: number };
 }
 
 export default function FromLibrary({
@@ -35,6 +37,8 @@ export default function FromLibrary({
   onGenerateStart,
   onGenerateEnd,
   onDeductCredits,
+  creditPerImage,
+  pricing,
 }: FromLibraryProps) {
   const { showToast } = useToast();
   const settingsRef = useRef<HTMLDivElement>(null);
@@ -238,7 +242,7 @@ export default function FromLibrary({
     const credited = await onDeductCredits(selectedImages.length);
     if (!credited) {
       showToast(
-        `Insufficient credits! You need ${selectedImages.length * 100} credits. Please go to user settings to add credits.`,
+        `Insufficient credits! You need ${selectedImages.length * creditPerImage} credits${pricing.discount_rate > 0 ? ` (${pricing.discount_rate}% discount applied)` : ''}. Please go to user settings to add credits.`,
         'error'
       );
       return;
@@ -575,7 +579,7 @@ export default function FromLibrary({
             onClick={generateVideo}
             disabled={selectedImages.length < 1}
           >
-            GENERATE MY VIDEO ({selectedImages.length * 100} CREDITS)
+            GENERATE MY VIDEO ({selectedImages.length * creditPerImage} CREDITS{pricing.discount_rate > 0 ? ` - ${pricing.discount_rate}% OFF` : ''})
           </button>
         </div>
       )}

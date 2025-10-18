@@ -25,6 +25,8 @@ interface FromURLProps {
   onGenerateStart: () => void;
   onGenerateEnd: () => void;
   onDeductCredits: (count: number) => Promise<boolean>;
+  creditPerImage: number;
+  pricing: { credit_per_image: number; discount_rate: number };
 }
 
 export default function FromURL({
@@ -33,6 +35,8 @@ export default function FromURL({
   onGenerateStart,
   onGenerateEnd,
   onDeductCredits,
+  creditPerImage,
+  pricing,
 }: FromURLProps) {
   const { showToast } = useToast();
   const settingsRef = useRef<HTMLDivElement>(null);
@@ -241,7 +245,7 @@ export default function FromURL({
     const credited = await onDeductCredits(selectedImages.length);
     if (!credited) {
       showToast(
-        `Insufficient credits! You need ${selectedImages.length * 100} credits. Please go to user settings to add credits.`,
+        `Insufficient credits! You need ${selectedImages.length * creditPerImage} credits${pricing.discount_rate > 0 ? ` (${pricing.discount_rate}% discount applied)` : ''}. Please go to user settings to add credits.`,
         'error'
       );
       return;
@@ -560,7 +564,7 @@ export default function FromURL({
                 onClick={generateVideo}
                 disabled={selectedImages.length < 1}
               >
-                GENERATE MY VIDEO ({selectedImages.length * 100} CREDITS)
+                GENERATE MY VIDEO ({selectedImages.length * creditPerImage} CREDITS{pricing.discount_rate > 0 ? ` - ${pricing.discount_rate}% OFF` : ''})
               </button>
             </div>
           )}

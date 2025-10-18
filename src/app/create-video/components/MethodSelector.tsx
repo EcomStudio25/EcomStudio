@@ -38,7 +38,7 @@ export default function MethodSelector({
 
   return (
     <div className="method-selector">
-      <h3>Please choose an upload method:</h3>
+      <h3>Please choose an image upload method:</h3>
       <div className="method-cards">
         {methods.map((method) => (
           <div

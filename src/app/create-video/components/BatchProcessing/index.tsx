@@ -34,6 +34,8 @@ interface BatchProcessingProps {
   onGenerateStart: () => void;
   onGenerateEnd: () => void;
   onDeductCredits: (count: number) => Promise<boolean>;
+  creditPerImage: number;
+  pricing: { credit_per_image: number; discount_rate: number };
 }
 
 export default function BatchProcessing({
@@ -42,6 +44,8 @@ export default function BatchProcessing({
   onGenerateStart,
   onGenerateEnd,
   onDeductCredits,
+  creditPerImage,
+  pricing,
 }: BatchProcessingProps) {
   const { showToast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -304,7 +308,7 @@ export default function BatchProcessing({
     const credited = await onDeductCredits(totalImages);
     if (!credited) {
       showToast(
-        `Insufficient credits! You need ${totalImages * 100} credits. Please go to user settings to add credits.`,
+        `Insufficient credits! You need ${totalImages * creditPerImage} credits${pricing.discount_rate > 0 ? ` (${pricing.discount_rate}% discount applied)` : ''}. Please go to user settings to add credits.`,
         'error'
       );
       return;
@@ -613,7 +617,7 @@ export default function BatchProcessing({
             onClick={generateBatchVideos}
             disabled={completedCount !== urls.length}
           >
-            GENERATE ({completedCount}) VIDEOS ({batchData.reduce((sum, data) => sum + data.selectedImages.length, 0) * 100} CREDITS)
+            GENERATE ({completedCount}) VIDEOS ({batchData.reduce((sum, data) => sum + data.selectedImages.length, 0) * creditPerImage} CREDITS{pricing.discount_rate > 0 ? ` - ${pricing.discount_rate}% OFF` : ''})
           </button>
         </>
       )}

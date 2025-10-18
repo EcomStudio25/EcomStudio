@@ -26,6 +26,8 @@ interface FromComputerProps {
   onGenerateStart: () => void;
   onGenerateEnd: () => void;
   onDeductCredits: (count: number) => Promise<boolean>;
+  creditPerImage: number;
+  pricing: { credit_per_image: number; discount_rate: number };
 }
 
 export default function FromComputer({
@@ -34,6 +36,8 @@ export default function FromComputer({
   onGenerateStart,
   onGenerateEnd,
   onDeductCredits,
+  creditPerImage,
+  pricing,
 }: FromComputerProps) {
   const { showToast } = useToast();
 
@@ -228,7 +232,7 @@ export default function FromComputer({
     const credited = await onDeductCredits(uploadCount);
     if (!credited) {
       showToast(
-        `Insufficient credits! You need ${uploadCount * 100} credits. Please go to user settings to add credits.`,
+        `Insufficient credits! You need ${uploadCount * creditPerImage} credits${pricing.discount_rate > 0 ? ` (${pricing.discount_rate}% discount applied)` : ''}. Please go to user settings to add credits.`,
         'error'
       );
       return;

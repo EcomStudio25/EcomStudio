@@ -36,7 +36,7 @@ export default function CreateVideoPage() {
   const [currentMethod, setCurrentMethod] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
-  const { checkCredits, deductCredits } = useCredits(supabase, currentUserId);
+  const { checkCredits, deductCredits, creditPerImage, pricing } = useCredits(supabase, currentUserId);
 
   useEffect(() => {
     loadUserProfile();
@@ -126,6 +126,8 @@ export default function CreateVideoPage() {
             onGenerateStart={handleGenerateStart}
             onGenerateEnd={handleGenerateEnd}
             onDeductCredits={handleDeductCredits}
+            creditPerImage={creditPerImage}
+            pricing={pricing}
           />
         )}
 
@@ -136,6 +138,8 @@ export default function CreateVideoPage() {
             onGenerateStart={handleGenerateStart}
             onGenerateEnd={handleGenerateEnd}
             onDeductCredits={handleDeductCredits}
+            creditPerImage={creditPerImage}
+            pricing={pricing}
           />
         )}
 
@@ -146,6 +150,8 @@ export default function CreateVideoPage() {
             onGenerateStart={handleGenerateStart}
             onGenerateEnd={handleGenerateEnd}
             onDeductCredits={handleDeductCredits}
+            creditPerImage={creditPerImage}
+            pricing={pricing}
           />
         )}
 
@@ -156,6 +162,8 @@ export default function CreateVideoPage() {
             onGenerateStart={handleGenerateStart}
             onGenerateEnd={handleGenerateEnd}
             onDeductCredits={handleDeductCredits}
+            creditPerImage={creditPerImage}
+            pricing={pricing}
           />
         )}
       </div>
