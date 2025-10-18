@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { showAdminToast } from './AdminToast';
+import ConfirmPassword from './ConfirmPassword';
 
 interface NotificationsProps {
   supabase: SupabaseClient;
@@ -20,6 +21,8 @@ export default function Notifications({ supabase }: NotificationsProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  const [pendingNotification, setPendingNotification] = useState<string>('');
 
   const MAX_CHARS = 150;
 
@@ -65,9 +68,13 @@ export default function Notifications({ supabase }: NotificationsProps) {
       return;
     }
 
-    if (!confirm('This will send notification to ALL users. Are you sure?')) {
-      return;
-    }
+    // Show password confirmation
+    setPendingNotification(notificationText);
+    setShowPasswordConfirm(true);
+  };
+
+  const executeNotificationSend = async () => {
+    setShowPasswordConfirm(false);
 
     try {
       setSending(true);
@@ -100,6 +107,7 @@ export default function Notifications({ supabase }: NotificationsProps) {
 
       showAdminToast(`Notification sent successfully to ${users.length} users!`, 'success');
       setNotificationText('');
+      setPendingNotification('');
       await loadNotifications();
       setSending(false);
     } catch (error) {
@@ -107,6 +115,11 @@ export default function Notifications({ supabase }: NotificationsProps) {
       showAdminToast('Failed to send notification. Please try again.', 'error');
       setSending(false);
     }
+  };
+
+  const cancelNotificationSend = () => {
+    setShowPasswordConfirm(false);
+    setPendingNotification('');
   };
 
   const deleteNotification = async (notification: Notification) => {
@@ -150,6 +163,15 @@ export default function Notifications({ supabase }: NotificationsProps) {
 
   return (
     <>
+      {showPasswordConfirm && (
+        <ConfirmPassword
+          supabase={supabase}
+          action={`Send notification to ALL users: "${pendingNotification}"`}
+          onConfirm={executeNotificationSend}
+          onCancel={cancelNotificationSend}
+        />
+      )}
+
       <style jsx>{`
         .notifications-container {
           display: grid;

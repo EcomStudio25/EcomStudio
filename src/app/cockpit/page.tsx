@@ -35,6 +35,38 @@ export default function AdminPanel() {
     checkAdminAuth();
   }, []);
 
+  // Auto logout after 30 minutes of inactivity
+  useEffect(() => {
+    if (!currentUser) return;
+
+    let timeout: NodeJS.Timeout;
+    const TIMEOUT_DURATION = 30 * 60 * 1000; // 30 minutes
+
+    const resetTimeout = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(async () => {
+        alert('Session expired due to inactivity. Please login again.');
+        await supabase.auth.signOut();
+        router.push('/cockpit/login');
+      }, TIMEOUT_DURATION);
+    };
+
+    // Reset timeout on user activity
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart', 'click'];
+    events.forEach(event => {
+      document.addEventListener(event, resetTimeout);
+    });
+
+    resetTimeout();
+
+    return () => {
+      clearTimeout(timeout);
+      events.forEach(event => {
+        document.removeEventListener(event, resetTimeout);
+      });
+    };
+  }, [currentUser, router, supabase]);
+
   const checkAdminAuth = async () => {
     try {
       const { data: { session }, error } = await supabase.auth.getSession();
